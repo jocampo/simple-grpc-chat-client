@@ -1,26 +1,32 @@
 import React from 'react';
-import logo from './logo.svg';
 import './App.css';
+import { joinChat, sendMessage } from './middleware/rpc_client';
 
-function App() {
-  return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.tsx</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
-  );
+joinChat();
+
+interface AppState {
+    text: string;
+}
+
+class App extends React.Component<{}, AppState> {
+    constructor(props: any) {
+        super(props);
+        this.state = { text: '' };
+        this.onSubmit = this.onSubmit.bind(this);
+    }
+
+    onSubmit(event: any) {
+        sendMessage(this.state.text);
+    }
+
+    render() {
+        return (
+            <div className="App">
+                <input type="text" name="name" value={this.state.text}/>
+                <input type="button" value="Send" onClick={this.onSubmit} />
+            </div>
+        );
+    }
 }
 
 export default App;
